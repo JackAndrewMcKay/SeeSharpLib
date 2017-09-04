@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SeeSharpLib.Images</AssemblyName>
+    <RootNamespace>SeeSharpLib.Images</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\SeeSharpLib.Common.csproj" />
+  </ItemGroup>
+
+</Project>
