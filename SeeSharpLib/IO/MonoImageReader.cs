@@ -5,9 +5,9 @@ namespace SeeSharpLib.IO
 {
 	public class MonoImageReader
 	{
-		public MonoImage<float> ReadFloatFrame(string path, int width, int height)
+		public MonoImage<float> ReadFloatFrame(string path, int width, int height, int bitDepth)
 		{
-			var img = new MonoImage<float>(width, height);
+			var img = new MonoImage<float>(width, height, bitDepth);
 
 			using (var stream = File.OpenRead(path))
 			{
@@ -26,9 +26,9 @@ namespace SeeSharpLib.IO
 			return img;
 		}
 
-		public MonoImage<ushort> ReadUShortFrame(string path, int width, int height)
+		public MonoImage<ushort> ReadUShortFrame(string path, int width, int height, int bitDepth)
 		{
-			var img = new MonoImage<ushort>(width, height);
+			var img = new MonoImage<ushort>(width, height, bitDepth);
 
 			using (var stream = File.OpenRead(path))
 			{
@@ -47,9 +47,9 @@ namespace SeeSharpLib.IO
 			return img;
 		}
 
-		public MonoImage<byte> ReadByteFrame(string path, int width, int height)
+		public MonoImage<byte> ReadByteFrame(string path, int width, int height, int bitDepth)
 		{
-			var img = new MonoImage<byte>(width, height);
+			var img = new MonoImage<byte>(width, height, bitDepth);
 
 			using (var stream = File.OpenRead(path))
 			{
