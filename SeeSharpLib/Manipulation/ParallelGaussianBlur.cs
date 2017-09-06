@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SeeSharpLib.Images;
+using SeeSharpLib.PixelOperations;
 
 namespace SeeSharpLib.Manipulation
 {
-	public class ParallelGaussianBlur : IGrayscaleImageManipulation<float>
+	public class ParallelGaussianBlur<TPixel> : IGrayscaleImageManipulation<TPixel>
 	{
 		private readonly int _kernelRadius;
 		private readonly int _kernelWidth;
@@ -22,9 +23,9 @@ namespace SeeSharpLib.Manipulation
 			NormaliseKernel();
 		}
 
-		public void ApplyTo(MonoImage<float> image)
+		public void ApplyTo(MonoImage<TPixel> image)
 		{
-			MonoImage<float> intermediateImage = image.Clone() as MonoImage<float>;
+			MonoImage<TPixel> intermediateImage = image.Clone() as MonoImage<TPixel>;
 
 			ApplyHorizontally(image, intermediateImage);
 			ApplyVertically(intermediateImage, image);
@@ -73,7 +74,7 @@ namespace SeeSharpLib.Manipulation
 		/// </summary>
 		/// <param name="srcImage">The image source data.</param>
 		/// <param name="dstImage">The image destination data.</param>
-		private void ApplyHorizontally(MonoImage<float> srcImage, MonoImage<float> dstImage)
+		private void ApplyHorizontally(MonoImage<TPixel> srcImage, MonoImage<TPixel> dstImage)
 		{
 			int maxIntensity = (int) (Math.Pow(2, srcImage.BitDepth) - 1);
 
@@ -81,19 +82,20 @@ namespace SeeSharpLib.Manipulation
 			{
 				for (int x = 0; x < srcImage.Size.Width; x++)
 				{
-					double accumulated = 0;
+					Pixel<TPixel> accumulated = default(TPixel);
 
 					for (int kernelX = 0, pixelX = x - _kernelRadius; kernelX < _kernelWidth; kernelX++, pixelX++)
 					{
 						int correctedX = MirrorXIfOutOfRange(pixelX, srcImage.Size.Width);
-
-						accumulated += (_kernel[kernelX] * srcImage[correctedX, y]);
+						
+						accumulated += (srcImage[correctedX, y] * _kernel[kernelX]);
 					}
+
 
 					accumulated = Math.Max(0, accumulated);
 					accumulated = Math.Min(maxIntensity, accumulated);
 
-					dstImage[x, y] = (float) accumulated;
+					dstImage[x, y] = accumulated;
 				}
 			});
 		}
